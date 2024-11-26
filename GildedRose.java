@@ -1,5 +1,6 @@
 package com.gildedrose;
 
+//Виконані пункти 1,2
 class GildedRose {
     Item[] items;
 
