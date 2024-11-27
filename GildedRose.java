@@ -15,97 +15,56 @@ class GildedRose {
     }
 
     private void updateQuality(Item item) {  //весь початковий код зібарний у окремий метод для зрозумілості логіки
-        if (isSpecialItem(item)) {
+        if (item.getName().isAgedBrie() || item.getName().isBackstagePass()) {
             updateSpecialItem(item);
         }
 
-        if (!isSpecialItem(item)) { //замінили else
+        if (!item.getName().isLegendary()) {
             updateOrdinaryItem(item);
         }
 
-        IfNotSulfurasDecreaseSellIn(item);
+        if (!item.getName().isLegendary()) {
+            item.getSellIn().decrease();
+        }
+
         updateOverdue(item);
     }
 
-    private boolean isSpecialItem(Item item) {  //перевірка на особливі предмети
-        return item.name.equals("Aged Brie") || item.name.equals("Backstage passes to a TAFKAL80ETC concert");
-    }
-
-    private void updateSpecialItem(Item item) {  //оновлення даних для особоливих предметів
-        if (item.quality < 50) {
-            item.quality += 1;
+    private void updateSpecialItem(Item item) {
+        if (item.getQuality().Int() < 50) {
+            item.getQuality().increase();
         }
 
-        if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+        if (item.getName().isBackstagePass()) {
             updateForBackstage(item);
         }
     }
 
-    private void updateForBackstage(Item item) {  //оновлення для Backstage
-        if (item.sellIn < 11 && item.quality < 50) {
-            item.quality += 1;
+    private void updateForBackstage(Item item) {
+        if (item.getSellIn().getValue() < 11 && item.getQuality().Int() < 50) {
+            item.getQuality().increase();
         }
-        if (item.sellIn < 6 && item.quality < 50) {
-            item.quality += 1;
-        }
-    }
-
-    private void updateOrdinaryItem(Item item) {  //оновлення для неособливих речей
-        if (item.quality > 0 && !isSulfuras(item)) {
-            decreaseQuality(item);
+        if (item.getSellIn().getValue() < 6 && item.getQuality().Int() < 50) {
+            item.getQuality().increase();
         }
     }
 
-    private boolean isSulfuras(Item item) {  //перевірка на Sulfuras
-        return item.name.equals("Sulfuras, Hand of Ragnaros");
-    }
-
-    private void IfNotSulfurasDecreaseSellIn(Item item) {  // Зменшення sellIn, якщо це не Sulfuras
-        if (!isSulfuras(item)) {
-            item.sellIn -= 1;
+    private void updateOrdinaryItem(Item item) {
+        if (item.getQuality().Int() > 0 && !item.getName().isLegendary()) {
+            item.getQuality().decrease();
         }
     }
 
-    private void updateOverdue(Item item) {  //оновлення для просрочених товарів
-        if (item.sellIn >= 0) {
-            return;  // Якщо не просрочено, виходимо
+    private void updateOverdue(Item item) {
+        if (!item.getSellIn().isExpired()) {
+            return;
         }
 
-        if (isSpecialItem(item)) {
-            updateOverdueSpecialItem(item);
+        if (item.getName().isBackstagePass()) {
+            item.getQuality().setValue(0);
+            return;
         }
 
-        if (!isSpecialItem(item)) {
-            updateOverdueOrdinaryItem(item);
-        }
-    }
-
-    private void updateOverdueSpecialItem(Item item) {  // якщо просрочений товар особливий
-        if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-            item.quality = 0;
-            return; //завершуємо методУ
-        }
-
-        if (item.quality < 50) {
-            increaseQuality(item);  // Збільшуємо якість для інших особливих предметів
-        }
-    }
-
-    private void updateOverdueOrdinaryItem(Item item) {  //якщо просрочений товар не особливий
-        if (item.quality > 0 && !isSulfuras(item)) {
-            decreaseQuality(item);
-        }
-    }
-
-    private void increaseQuality(Item item) { //метод для збільшення якості
-        if (item.quality < 50) {  // Перевірка, щоб не перевищити 50
-            item.quality += 1;
-        }
-    }
-
-    private void decreaseQuality(Item item) {  //метод для зменшення якості
-        if (item.quality > 0) {  // Перевірка, щоб не було від'ємне число
-            item.quality -= 1;
-        }
+        item.getQuality().decrease();
     }
 }

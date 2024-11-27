@@ -2,20 +2,31 @@ package com.gildedrose;
 
 public class Item {
 
-    public String name;
-
-    public int sellIn;
-
-    public int quality;
+    private final Name name;  // Тепер тип Name замість String
+    private final SellIn sellIn;  // Інкапсуляція sellIn
+    private final Quality quality;  // Інкапсуляція quality
 
     public Item(String name, int sellIn, int quality) {
-        this.name = name;
-        this.sellIn = sellIn;
-        this.quality = quality;
+        this.name = Name.fromName(name);  // Перетворюємо строку на відповідний тип Item
+        this.sellIn = new SellIn(sellIn);  // Створюємо об'єкт SellIn
+        this.quality = new Quality(quality);  // Створюємо об'єкт Quality
     }
 
-   @Override
-   public String toString() {
-        return this.name + ", " + this.sellIn + ", " + this.quality;
+    public Name getName() {
+        return name;
+    }
+
+    public SellIn getSellIn() {
+        return sellIn;
+    }
+
+    public Quality getQuality() {
+        return quality;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + ", " + sellIn + ", " + quality;
     }
 }
+
