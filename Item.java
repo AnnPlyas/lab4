@@ -2,16 +2,14 @@ package com.gildedrose;
 
 public class Item {
     private final ItemType name;
-    private final DaysUntilExpiration sellIn;
-    private final Quality quality;
+    private final ItemAttributes attributes;
 
     public Item(String name, int sellIn, int quality) {
         this.name = ItemType.fromName(name);
-        this.sellIn = new DaysUntilExpiration(sellIn);
-        this.quality = new Quality(quality);
+        this.attributes = new ItemAttributes(sellIn, quality);
     }
 
-    public void updateQuality() { //весь початковий код зібарний у окремий метод для зрозумілості логіки
+    public void updateQuality() {
         if (name.isAgedBrie() || name.isBackstagePass()) {
             updateSpecialItem();
         }
@@ -21,15 +19,15 @@ public class Item {
         }
 
         if (!name.isLegendary()) {
-            sellIn.decrease();
+            attributes.decreaseSellIn();
         }
 
         updateOverdue();
     }
 
     private void updateSpecialItem() {
-        if (quality.toInt() < 50) {
-            quality.increase();
+        if (attributes.getQuality().toInt() < 50) {
+            attributes.getQuality().increase();
         }
 
         if (name.isBackstagePass()) {
@@ -38,48 +36,44 @@ public class Item {
     }
 
     private void updateForBackstage() {
-        if (sellIn.getValue() < 11 && quality.toInt() < 50) {
-            quality.increase();
+        if (attributes.getSellIn().getValue() < 11 && attributes.getQuality().toInt() < 50) {
+            attributes.getQuality().increase();
         }
-        if (sellIn.getValue() < 6 && quality.toInt() < 50) {
-            quality.increase();
+        if (attributes.getSellIn().getValue() < 6 && attributes.getQuality().toInt() < 50) {
+            attributes.getQuality().increase();
         }
     }
 
     private void updateOrdinaryItem() {
-        if (quality.toInt() > 0 && !name.isLegendary()) {
-            quality.decrease();
+        if (attributes.getQuality().toInt() > 0 && !name.isLegendary()) {
+            attributes.getQuality().decrease();
         }
     }
 
     private void updateOverdue() {
-        if (!sellIn.isExpired()) {
+        if (!attributes.isExpired()) {
             return;
         }
 
         if (name.isBackstagePass()) {
-            quality.setValue(0);
+            attributes.getQuality().setValue(0);
             return;
         }
 
-        quality.decrease();
+        attributes.getQuality().decrease();
     }
 
     public ItemType getName() {
         return name;
     }
 
-    public DaysUntilExpiration getSellIn() {
-        return sellIn;
-    }
-
-    public Quality getQuality() {
-        return quality;
+    public ItemAttributes getAttributes() {
+        return attributes;
     }
 
     @Override
     public String toString() {
-        return name + ", " + sellIn + ", " + quality;
+        return name + ", " + attributes;
     }
 }
 

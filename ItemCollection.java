@@ -3,7 +3,7 @@ package com.gildedrose;
 import java.util.Arrays;
 
 class ItemCollection {
-    private final Item[] items; //масив не змінити після ініціалізації
+    private final Item[] items;
 
     public ItemCollection(Item[] items) {
         this.items = items;
@@ -11,7 +11,7 @@ class ItemCollection {
 
     public void updateQuality() {
         for (Item item : items) {
-            item.updateQuality(); //виклик оновленн,
+            item.updateQuality();
         }
     }
 
