@@ -1,15 +1,15 @@
 package com.gildedrose;
 
 public class Item {
-    private final ItemType name;
-    private final ItemAttributes attributes;
+    private final ItemType name; //поле для визначення типу товару
+    private final ItemAttributes attributes; //поле для визначення кількості днів до закінчення терміну придатності та якість
 
     public Item(String name, int sellIn, int quality) {
         this.name = ItemType.fromName(name);
         this.attributes = new ItemAttributes(sellIn, quality);
     }
 
-    public void updateQuality() {
+    public void updateQuality() { //метод для оновлення інформації
         if (name.isAgedBrie() || name.isBackstagePass()) {
             updateSpecialItem();
         }
@@ -26,8 +26,8 @@ public class Item {
     }
 
     private void updateSpecialItem() {
-        if (attributes.getQuality().toInt() < 50) {
-            attributes.getQuality().increase();
+        if (attributes.qualityBelowMax()) {
+            attributes.increaseQuality();
         }
 
         if (name.isBackstagePass()) {
@@ -36,17 +36,17 @@ public class Item {
     }
 
     private void updateForBackstage() {
-        if (attributes.getSellIn().getValue() < 11 && attributes.getQuality().toInt() < 50) {
-            attributes.getQuality().increase();
+        if (attributes.sellInBelow(11) && attributes.qualityBelowMax()) {
+            attributes.increaseQuality();
         }
-        if (attributes.getSellIn().getValue() < 6 && attributes.getQuality().toInt() < 50) {
-            attributes.getQuality().increase();
+        if (attributes.sellInBelow(6) && attributes.qualityBelowMax()) {
+            attributes.increaseQuality();
         }
     }
 
     private void updateOrdinaryItem() {
-        if (attributes.getQuality().toInt() > 0 && !name.isLegendary()) {
-            attributes.getQuality().decrease();
+        if (attributes.qualityAboveZero()) {
+            attributes.decreaseQuality();
         }
     }
 
@@ -56,19 +56,11 @@ public class Item {
         }
 
         if (name.isBackstagePass()) {
-            attributes.getQuality().setValue(0);
+            attributes.setQualityToZero();
             return;
         }
 
-        attributes.getQuality().decrease();
-    }
-
-    public ItemType getName() {
-        return name;
-    }
-
-    public ItemAttributes getAttributes() {
-        return attributes;
+        attributes.decreaseQuality();
     }
 
     @Override
@@ -76,5 +68,3 @@ public class Item {
         return name + ", " + attributes;
     }
 }
-
-

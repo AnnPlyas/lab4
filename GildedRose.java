@@ -20,4 +20,3 @@ class GildedRose {
         return itemCollection.toString();
     }
 }
-

@@ -1,24 +1,40 @@
 package com.gildedrose;
 
-public class ItemAttributes { //винесла в цей клас sellin, quality
-    private final DaysUntilExpiration sellIn;
-    private final Quality quality;
+public class ItemAttributes {
+    private final DaysUntilExpiration sellIn; //поле терміну придатності
+    private final Quality quality; // поле якості
 
     public ItemAttributes(int sellIn, int quality) {
         this.sellIn = new DaysUntilExpiration(sellIn);
         this.quality = new Quality(quality);
     }
 
-    public DaysUntilExpiration getSellIn() {
-        return sellIn;
-    }
-
-    public Quality getQuality() {
-        return quality;
-    }
-
     public void decreaseSellIn() {
         sellIn.decrease();
+    }
+
+    public void increaseQuality() {
+        quality.increase();
+    }
+
+    public void decreaseQuality() {
+        quality.decrease();
+    }
+
+    public void setQualityToZero() {
+        quality.setValue(0);
+    }
+
+    public boolean qualityBelowMax() {
+        return quality.toInt() < 50;
+    }
+
+    public boolean qualityAboveZero() {
+        return quality.toInt() > 0;
+    }
+
+    public boolean sellInBelow(int value) {
+        return sellIn.getValue() < value;
     }
 
     public boolean isExpired() {
@@ -30,4 +46,5 @@ public class ItemAttributes { //винесла в цей клас sellin, qualit
         return sellIn + ", " + quality;
     }
 }
+
 

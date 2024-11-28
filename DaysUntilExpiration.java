@@ -4,10 +4,10 @@ class DaysUntilExpiration {
     private int value;
 
     public DaysUntilExpiration(int value) {
-        this.value = validate(value); //перевірка значення
+        this.value = validate(value);
     }
 
-    public int getValue() { //повертає кількість днів придатності
+    public int getValue() {
         return value;
     }
 
@@ -15,7 +15,7 @@ class DaysUntilExpiration {
         value = Math.max(0, value - 1);
     }
 
-    public boolean isExpired() { // чи просрочений товар
+    public boolean isExpired() {
         return value <= 0;
     }
 

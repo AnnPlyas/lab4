@@ -9,7 +9,7 @@ class ItemCollection {
         this.items = items;
     }
 
-    public void updateQuality() {
+    public void updateQuality() { //виклик методу оновлення
         for (Item item : items) {
             item.updateQuality();
         }
