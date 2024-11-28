@@ -8,7 +8,7 @@ class Quality {
     }
 
     public void increase() {
-        value = validate(value + 1); //після збільшення переконуємося що значення в правильних межах
+        value = validate(value + 1); //після збільшення переконуємося, що значення в правильних межах
     }
 
     public void decrease() {

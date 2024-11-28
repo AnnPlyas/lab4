@@ -1,15 +1,68 @@
 package com.gildedrose;
 
 public class Item {
-
-    private final Name name;  // Тепер тип Name замість String
-    private final SellIn sellIn;  // Інкапсуляція sellIn
-    private final Quality quality;  // Інкапсуляція quality
+    private final Name name;
+    private final SellIn sellIn;
+    private final Quality quality;
 
     public Item(String name, int sellIn, int quality) {
-        this.name = Name.fromName(name);  // Перетворюємо строку на відповідний тип Item
-        this.sellIn = new SellIn(sellIn);  // Створюємо об'єкт SellIn
-        this.quality = new Quality(quality);  // Створюємо об'єкт Quality
+        this.name = Name.fromName(name);
+        this.sellIn = new SellIn(sellIn);
+        this.quality = new Quality(quality);
+    }
+
+    public void updateQuality() { //весь початковий код зібарний у окремий метод для зрозумілості логіки
+        if (name.isAgedBrie() || name.isBackstagePass()) {
+            updateSpecialItem();
+        }
+
+        if (!name.isLegendary()) {
+            updateOrdinaryItem();
+        }
+
+        if (!name.isLegendary()) {
+            sellIn.decrease();
+        }
+
+        updateOverdue();
+    }
+
+    private void updateSpecialItem() {
+        if (quality.Int() < 50) {
+            quality.increase();
+        }
+
+        if (name.isBackstagePass()) {
+            updateForBackstage();
+        }
+    }
+
+    private void updateForBackstage() {
+        if (sellIn.getValue() < 11 && quality.Int() < 50) {
+            quality.increase();
+        }
+        if (sellIn.getValue() < 6 && quality.Int() < 50) {
+            quality.increase();
+        }
+    }
+
+    private void updateOrdinaryItem() {
+        if (quality.Int() > 0 && !name.isLegendary()) {
+            quality.decrease();
+        }
+    }
+
+    private void updateOverdue() {
+        if (!sellIn.isExpired()) {
+            return;
+        }
+
+        if (name.isBackstagePass()) {
+            quality.setValue(0);
+            return;
+        }
+
+        quality.decrease();
     }
 
     public Name getName() {
@@ -26,7 +79,8 @@ public class Item {
 
     @Override
     public String toString() {
-        return this.name + ", " + sellIn + ", " + quality;
+        return name + ", " + sellIn + ", " + quality;
     }
 }
+
 
