@@ -11,7 +11,7 @@ class ItemCollection {
 
     public void updateQuality() {
         for (Item item : items) {
-            item.updateQuality(); //виклик оновлення
+            item.updateQuality(); //виклик оновленн,
         }
     }
 

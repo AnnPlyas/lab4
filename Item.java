@@ -1,13 +1,13 @@
 package com.gildedrose;
 
 public class Item {
-    private final Name name;
-    private final SellIn sellIn;
+    private final ItemType name;
+    private final DaysUntilExpiration sellIn;
     private final Quality quality;
 
     public Item(String name, int sellIn, int quality) {
-        this.name = Name.fromName(name);
-        this.sellIn = new SellIn(sellIn);
+        this.name = ItemType.fromName(name);
+        this.sellIn = new DaysUntilExpiration(sellIn);
         this.quality = new Quality(quality);
     }
 
@@ -28,7 +28,7 @@ public class Item {
     }
 
     private void updateSpecialItem() {
-        if (quality.Int() < 50) {
+        if (quality.toInt() < 50) {
             quality.increase();
         }
 
@@ -38,16 +38,16 @@ public class Item {
     }
 
     private void updateForBackstage() {
-        if (sellIn.getValue() < 11 && quality.Int() < 50) {
+        if (sellIn.getValue() < 11 && quality.toInt() < 50) {
             quality.increase();
         }
-        if (sellIn.getValue() < 6 && quality.Int() < 50) {
+        if (sellIn.getValue() < 6 && quality.toInt() < 50) {
             quality.increase();
         }
     }
 
     private void updateOrdinaryItem() {
-        if (quality.Int() > 0 && !name.isLegendary()) {
+        if (quality.toInt() > 0 && !name.isLegendary()) {
             quality.decrease();
         }
     }
@@ -65,11 +65,11 @@ public class Item {
         quality.decrease();
     }
 
-    public Name getName() {
+    public ItemType getName() {
         return name;
     }
 
-    public SellIn getSellIn() {
+    public DaysUntilExpiration getSellIn() {
         return sellIn;
     }
 

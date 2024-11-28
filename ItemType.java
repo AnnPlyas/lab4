@@ -1,6 +1,6 @@
 package com.gildedrose;
 
-public enum Name { //перелік з назвами
+public enum ItemType { //перелік з назвами
     LEGENDARY("Sulfuras, Hand of Ragnaros"),
     AGED_BRIE("Aged Brie"),
     BACKSTAGE_PASS("Backstage passes to a TAFKAL80ETC concert"),
@@ -8,12 +8,12 @@ public enum Name { //перелік з назвами
 
     private final String name;
 
-    Name(String name) {
+    ItemType(String name) {
         this.name = name;
     }
 
-    public static Name fromName(String name) { //перевірка значення
-        for (Name type : values()) {
+    public static ItemType fromName(String name) { //перевірка значення
+        for (ItemType type : values()) {
             if (type.name.equals(name)) {
                 return type;
             }

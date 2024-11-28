@@ -1,9 +1,9 @@
 package com.gildedrose;
 
-class SellIn {
+class DaysUntilExpiration {
     private int value;
 
-    public SellIn(int value) {
+    public DaysUntilExpiration(int value) {
         this.value = validate(value); //перевірка значення
     }
 

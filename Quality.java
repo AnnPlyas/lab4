@@ -20,7 +20,7 @@ class Quality {
         this.value = validate(value);
     }
 
-    public int Int() { //повертає у вигляді цілого числа
+    public int toInt() { //повертає у вигляді цілого числа
         return value;
     }
 
